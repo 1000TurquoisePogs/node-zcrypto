@@ -23,6 +23,7 @@ extern "C" int openKDB_impl( const char* filename, const char* password, gsk_han
 extern "C" int closeKDB_impl( gsk_handle* handle);
 extern "C" int openKeyRing_impl( const char* ring_name, gsk_handle* handle);
 extern "C" char* errorString_impl( int err, char *errstr, int errstrlen );
+extern "C" int getRecordLabels_impl( gsk_handle *handle, bool private_key, int *num_labels, char ***labels );
 
 class ZCrypto : public Napi::ObjectWrap<ZCrypto> {
  public:
@@ -42,6 +43,7 @@ class ZCrypto : public Napi::ObjectWrap<ZCrypto> {
   Napi::Value ExportKeyToFile(const Napi::CallbackInfo &info);
   Napi::Value ExportKeyToBuffer(const Napi::CallbackInfo &info);
   Napi::Value ExportCertToBuffer(const Napi::CallbackInfo &info);
+  Napi::Value GetRecordLabels(const Napi::CallbackInfo &info);
 
   bool initialized;
   gsk_handle handle;

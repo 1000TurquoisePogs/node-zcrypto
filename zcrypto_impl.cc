@@ -78,6 +78,13 @@ extern "C" int openKeyRing_impl( const char* ring_name, gsk_handle* handle) {
     return rc;
 }
 
+extern "C" int getRecordLabels_impl( gsk_handle *handle, bool private_key, int *num_labels, char ***labels ) {
+    int orig = __ae_thread_swapmode(__AE_EBCDIC_MODE);
+    int rc = gsk_get_record_labels(handle, private_key, num_labels, labels);
+    __ae_thread_swapmode(orig);
+    return rc;
+}
+
 extern "C" int exportKeyToFile_impl(const char* filename, const char* password, const char* label, gsk_handle* handle) {
     char * password_e = (char*)malloc(strlen(password) + 1);
     memcpy(password_e, password, strlen(password) + 1);

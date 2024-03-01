@@ -21,6 +21,7 @@ Napi::Object ZCrypto::Init(Napi::Env env, Napi::Object exports) {
     InstanceMethod("openKeyRing", &ZCrypto::OpenKeyRing),
     InstanceMethod("importKey", &ZCrypto::ImportKey),
     InstanceMethod("getErrorString", &ZCrypto::GetErrorString),
+    InstanceMethod("getRecordLabels", &ZCrypto::GetRecordLabels),
   });
 
   constructor = Napi::Persistent(func);
@@ -122,6 +123,27 @@ Napi::Value ZCrypto::OpenKDB(const Napi::CallbackInfo &info) {
   int rc = openKDB_impl(database.c_str(), passphrase.c_str(), &(this->handle));
 
   return Napi::Number::New(env, rc);
+}
+
+Napi::Value ZCrypto::GetRecordLabels(const Napi::CallbackInfo &info) {
+  Napi::Env env = info.Env();
+  if (info.Length() < 1) {
+    Napi::Error::New(env, "getRecordLabels needs 1 argument "
+                          "private_key");
+  }
+
+  bool private_key = static_cast<bool>(info[0].As<Napi::Boolean>());
+  
+  int num_labels;
+  char **labels;
+
+  int rc = getRecordLabels_impl(&(this->handle), private_key, &num_labels, &labels);
+
+  Napi::Array napi_labels = Napi::Array::New(env);
+  for (int i = 0; i < num_labels; i++){
+    napi_labels.Set(i, Napi::String::New(env, labels[i]));
+  }
+  return napi_labels;
 }
 
 Napi::Value ZCrypto::CloseKDB(const Napi::CallbackInfo &info) {

@@ -1,13 +1,17 @@
 {
-  "name": "zcrypto",
-  "version": "1.4.0",
+  "name": "@1000turquoisepogs/zcrypto",
+  "version": "1.5.0-rc1",
   "description": "A z/OS RACF keyring/kdb crypto npm for z/OS",
   "main": "index.js",
   "scripts": {
-    "build": "node-gyp build",
+    "install": "node-gyp-build",
+    "prebuild": "prebuildify --napi && chtag -tc 1047 prebuilds/os390-s390x/*",
     "test": "./setup.sh && ./node_modules/.bin/mocha -b -t 40000 --reporter spec"
   },
-  "repository": "ibmruntimes/node-zcrypto",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/1000turquoisepogs/node-zcrypto"
+  },
   "keywords": [
     "zos",
     "crypto",
@@ -23,7 +27,9 @@
   "devDependencies": {
     "async": "^1.5.0",
     "chai": "^4.1.2",
-    "mocha": "^9.2.1"
+    "mocha": "^9.2.1",
+    "node-gyp-build": "^4.8.0",
+    "prebuildify": "^6.0.0"
   },
   "author": "Igor Todorovski",
   "license": "Apache-2.0"

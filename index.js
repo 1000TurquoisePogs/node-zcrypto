@@ -6,7 +6,7 @@
 
 var forge = require("node-forge");
 const fs = require('fs')
-const zcrypto = require('./build/Release/zcrypto.node');
+const zcrypto = require('node-gyp-build')(__dirname);
 
 // Helper functions
 function ArrayToString(array) {
