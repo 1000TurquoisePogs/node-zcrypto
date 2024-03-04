@@ -9,7 +9,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-
 extern "C" int __chgfdccsid(int fd, unsigned short ccsid);
 
 extern "C" int createKDB_impl( const char* filename, const char* password, int length, int expiration, gsk_handle* handle) {
@@ -80,7 +79,7 @@ extern "C" int openKeyRing_impl( const char* ring_name, gsk_handle* handle) {
 
 extern "C" int getRecordLabels_impl( gsk_handle *handle, bool private_key, int *num_labels, char ***labels ) {
     int orig = __ae_thread_swapmode(__AE_EBCDIC_MODE);
-    int rc = gsk_get_record_labels(handle, private_key, num_labels, labels);
+    int rc = gsk_get_record_labels(*handle, private_key, num_labels, labels);
     __ae_thread_swapmode(orig);
     return rc;
 }

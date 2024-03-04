@@ -5,6 +5,7 @@
  */
 
 #include "zcrypto.h"
+#include <unistd.h>
 
 Napi::FunctionReference ZCrypto::constructor;
 
@@ -129,7 +130,8 @@ Napi::Value ZCrypto::GetRecordLabels(const Napi::CallbackInfo &info) {
   Napi::Env env = info.Env();
   if (info.Length() < 1) {
     Napi::Error::New(env, "getRecordLabels needs 1 argument "
-                          "private_key");
+                          "private_key")
+      .ThrowAsJavaScriptException();
   }
 
   bool private_key = static_cast<bool>(info[0].As<Napi::Boolean>());
@@ -139,9 +141,17 @@ Napi::Value ZCrypto::GetRecordLabels(const Napi::CallbackInfo &info) {
 
   int rc = getRecordLabels_impl(&(this->handle), private_key, &num_labels, &labels);
 
+  if (rc) {
+    Napi::Error::New(env, "gsk rc="+std::to_string(rc))
+      .ThrowAsJavaScriptException();
+  }
+
   Napi::Array napi_labels = Napi::Array::New(env);
   for (int i = 0; i < num_labels; i++){
-    napi_labels.Set(i, Napi::String::New(env, labels[i]));
+    char * label_e = (char*)malloc(strlen(labels[i])+1);
+    memcpy(label_e, labels[i], strlen(labels[i]) + 1);
+    __e2a_l(label_e, strlen(label_e)+1);
+    napi_labels.Set(i, Napi::String::New(env, label_e));
   }
   return napi_labels;
 }
