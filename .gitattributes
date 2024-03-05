@@ -1,5 +1,6 @@
 .gitattributes working-tree-encoding=iso8859-1 git-encoding=iso8859-1
 .gitignore working-tree-encoding=iso8859-1 git-encoding=iso8859-1
+.npmignore working-tree-encoding=iso8859-1 git-encoding=iso8859-1
 *.p12 working-tree-encoding=iso8859-1 git-encoding=iso8859-1
 *.json working-tree-encoding=iso8859-1 git-encoding=iso8859-1
 *.cc working-tree-encoding=iso8859-1 git-encoding=iso8859-1
